@@ -63,16 +63,29 @@ ref6 = resourceGroup.new_reference("./Resource/Assets.xcassets")
 
 
 target = proj.new_target(:application,proj_name,:ios,deployment_target)
-target.build_configuration_list.set_setting('INFOPLIST_FILE', "./" + proj_name + "/Resource/Info.plist")
+# target.build_configuration_list.set_setting('INFOPLIST_FILE', "./" + proj_name + "/Resource/Info.plist")
 target.add_file_references([ref1,ref2,ref3,ref4,ref5,ref6])
 
 
+
+#设置Project
+proj.build_configurations.each do |config|
+  #config.build_settings["CLANG_CXX_LANGUAGE_STANDARD"] = "gnu++98"
+  config.build_settings["IPHONEOS_DEPLOYMENT_TARGET"] = "14.0"
+end
+
+
+#设置target
 proj.targets.each do |target|
     target.build_configurations.each do |config|
         # 修改工程的标识，即Bundle ID
+        config.build_settings['INFOPLIST_FILE'] = "./" + proj_name + "/Resource/Info.plist"
+        config.build_settings['DEVELOPMENT_TEAM'] = "C3WT4R255D"
         config.build_settings['PRODUCT_BUNDLE_IDENTIFIER'] = bundle_id
     end
 end
+
+#设置info.plist文件
 
 
 proj.save 
